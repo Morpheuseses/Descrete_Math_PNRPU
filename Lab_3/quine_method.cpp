@@ -372,10 +372,13 @@ int main() {
     string str3 = "1111110011111100";
     string str4 = "1100000000001111";
     string str5 = "1011001100111111";
+    string str_inp = "1100110001111100";
+    cout << "Input vector: "<< str_inp << endl;
     //minimizer.get_vec_from_file("./vector.txt");
-    minimizer.input_vec(str5);
+    minimizer.input_vec(str_inp);
+    
     minimizer.console_print_conjuctions(minimizer.get_implicants());
     minimizer.print_table();
-    minimizer.console_print_conjuctions(minimizer.get_implicants());
+    //minimizer.console_print_conjuctions(minimizer.get_implicants());
     return 0;
 }
