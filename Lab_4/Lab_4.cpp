@@ -96,31 +96,23 @@ void Func_classes::input_vecs(int size, string strs[]) {
 
 }
 void Func_classes::valid_t0() {
-    for (int i = 0; i < vecs_size; i++) {
-        bool flag = false;
-        for (int j = 0; j < STD_VEC_SIZE; j++) {
-            if (this->vecs[i][j] == true) {
-                this->table[i][0] = false;
-                flag = true;
-                break;
-            }
+    for (int i =0; i < vecs_size; i++) {
+        if (vecs[i][0] == false) {
+            table[i][0] = true;
         }
-        if (flag != true)
-            this->table[i][0] = true;
+        else {
+            table[i][0] = false;
+        }
     }
 }
 void Func_classes::valid_t1() {
     for (int i = 0; i < vecs_size; i++) {
-        bool flag = false;
-        for (int j = 0; j < STD_VEC_SIZE; j++) {
-            if (this->vecs[i][j] == false) {
-                this->table[i][1] = false;
-                flag = true;
-                break;
-            }
+        if (vecs[i][7] == true) {
+            table[i][1] = true;
         }
-        if (flag != true)
-            this->table[i][1] = true;
+        else {
+            table[i][1] = false;
+        }
     }
 }
 void Func_classes::valid_s() {
@@ -138,50 +130,63 @@ void Func_classes::valid_s() {
     }
 }
 void Func_classes::valid_m() {
-    int check_order[8] = { 0, 1, 2, 4, 3, 5, 6, 7};
-    for (int i = 0; i < vecs_size; i++) {
-        bool flag = false;
-        bool fl_m = false;
-        for (int j = 0; j < STD_VEC_SIZE; j++) {
-            if (this->vecs[i][check_order[j]] == true) {
-                fl_m = true;
-            }
-            if (this->vecs[i][check_order[j]] == false && fl_m == true) {
-                this->table[i][3] = false;
-                flag = true;
-                break;
-            }
+    int order[6][4] = {
+        {0, 1, 3, 7},
+        {0, 1, 5, 7},
+        {0, 2, 3, 7},
+        {0, 2, 6, 7},
+        {0, 4, 6, 7},
+        {0, 4, 5, 7}
+    };
+    for (int v = 0; v < vecs_size; v++) {
+        bool exit = false;
+        for (int i = 0; i < 6 && exit == false; i++) {
+            
+            bool fl_changed = false;
+            for (int j = 0; j < 4; j++) {
+                if (vecs[v][order[i][j]] == true) {
+                    fl_changed = true;
+                };
+                if (vecs[v][order[i][j]] == false && fl_changed == true) {
+                    table[v][3] = false;
+                    exit = true;
+                    break;
+                }
+            };
         }
-        if (flag != true)
-            this->table[i][3] = true;
+        if (exit == false) {
+            table[v][3] = true;
+        }
     }
 }
 void Func_classes::valid_l() {
     for (int v = 0; v < vecs_size; v++) {
-        bool arr[8]{false};
-        arr[0] = vecs[v][0];
-        for (int i = 1; i < STD_VEC_SIZE; i++) {
-            bool sum = arr[0];
-            for (int j = 1; j < i; j++) {
-                sum = (sum + arr[j]) % 2;
-            }
-            if (((sum + 1) % 2) == vecs[v][i]) {
-                arr[i] = true;
-            }
-            else {
-                arr[i] = false;
-            }
+        
+        bool arr[4]{false};
+        // C_xy
+        arr[0] = ((((vecs[v][0] + vecs[v][4]) % 2 + vecs[v][2]) % 2) + vecs[v][6]) % 2;
+        // C_yz
+        arr[1] = (((vecs[v][0] + vecs[v][2]) % 2 + vecs[v][1]) + vecs[v][3]) % 2;
+        // C_xz
+        arr[2] = (((vecs[v][0] + vecs[v][1]) % 2 + vecs[v][4]) + vecs[v][5]) % 2;
+        // C_xyz
+        arr[3] = arr[0];
+        for (int i =1; i < vecs_size; i++) {
+            arr[3] = (arr[3] + arr[i]) % 2;
         }
-        bool flag = false;
-        for (int i = 0; i < STD_VEC_SIZE; i++) {
-            if (!(i < 3 || i == 4) && arr[i] == true) {
-                table[v][4] = false;
-                flag = true;
-                break;
-            }
+
+        cout << "arr(xy, yz, xz, xyz): " << endl;
+        for (int i = 0; i < 4; i++) {
+
+            cout << arr[i] << " ";
         }
-        if (flag == false) 
+        cout << endl;
+        if (arr[0] == true || arr[1] == true || arr[2] == true || arr[3] == true) {
+            table[v][4] = false;
+        }
+        else {
             table[v][4] = true;
+        }
     }
 }
 void Func_classes::fill_classes_table() {
@@ -310,13 +315,12 @@ void Func_classes::console_print_table(std::vector<std::string> headers) {
     cout << endl;
 }
 int main() {
-    int size = 5;
+    int size = 4;
     string strs[size] = {
         "0111",
         "10101110",
         "11001100",
-        "00",
-        "11"
+        "0001"
     };
     Func_classes getter;
     getter.input_vecs(size, strs);
