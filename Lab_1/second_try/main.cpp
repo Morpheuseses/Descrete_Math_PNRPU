@@ -42,7 +42,9 @@ struct MySet {
         this->size = set->size;
     }
     ~MySet() {
-            delete container;
+        if (container != nullptr) {
+            delete[] this->container;
+        }
     }
 };
 
