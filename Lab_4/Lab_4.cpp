@@ -6,16 +6,16 @@ using namespace std;
 #define STD_VEC_SIZE 8
 
 
-class Func_classes {
+class Func_fullness {
     bool** vecs;
     int vecs_size;
     bool** table;
 public:
-    Func_classes() {
+    Func_fullness() {
         vecs = nullptr;
         table = nullptr;
     }
-    ~Func_classes() {
+    ~Func_fullness() {
         if (vecs != nullptr) {
             for (int i = 0; i < vecs_size; i++) {
                 delete[] vecs[i];
@@ -44,7 +44,7 @@ public:
 };
 
 // implementation
-string Func_classes::convertTo8(string vec) {
+string Func_fullness::convertTo8(string vec) {
     string res = "";
     switch (vec.length())
     {
@@ -70,7 +70,7 @@ string Func_classes::convertTo8(string vec) {
     }
     return res;
 }
-void Func_classes::input_vecs(int size, string strs[]) {
+void Func_fullness::input_vecs(int size, string strs[]) {
     vecs_size = size;
     this->vecs = new bool*[size];
 
@@ -95,7 +95,7 @@ void Func_classes::input_vecs(int size, string strs[]) {
     }
 
 }
-void Func_classes::valid_t0() {
+void Func_fullness::valid_t0() {
     for (int i =0; i < vecs_size; i++) {
         if (vecs[i][0] == false) {
             table[i][0] = true;
@@ -105,7 +105,7 @@ void Func_classes::valid_t0() {
         }
     }
 }
-void Func_classes::valid_t1() {
+void Func_fullness::valid_t1() {
     for (int i = 0; i < vecs_size; i++) {
         if (vecs[i][7] == true) {
             table[i][1] = true;
@@ -115,7 +115,7 @@ void Func_classes::valid_t1() {
         }
     }
 }
-void Func_classes::valid_s() {
+void Func_fullness::valid_s() {
     for (int i = 0; i < vecs_size; i++) {
         bool flag = false;
         for (int j = 0; j < STD_VEC_SIZE; j++) {
@@ -129,7 +129,7 @@ void Func_classes::valid_s() {
             this->table[i][2] = true;
     }
 }
-void Func_classes::valid_m() {
+void Func_fullness::valid_m() {
     int order[6][4] = {
         {0, 1, 3, 7},
         {0, 1, 5, 7},
@@ -159,7 +159,7 @@ void Func_classes::valid_m() {
         }
     }
 }
-void Func_classes::valid_l() {
+void Func_fullness::valid_l() {
     for (int v = 0; v < vecs_size; v++) {
         
         bool arr[4]{false};
@@ -175,12 +175,6 @@ void Func_classes::valid_l() {
             arr[3] = (arr[3] + arr[i]) % 2;
         }
 
-        cout << "arr(xy, yz, xz, xyz): " << endl;
-        for (int i = 0; i < 4; i++) {
-
-            cout << arr[i] << " ";
-        }
-        cout << endl;
         if (arr[0] == true || arr[1] == true || arr[2] == true || arr[3] == true) {
             table[v][4] = false;
         }
@@ -189,7 +183,7 @@ void Func_classes::valid_l() {
         }
     }
 }
-void Func_classes::fill_classes_table() {
+void Func_fullness::fill_classes_table() {
     this->table = new bool*[vecs_size];
     for (int i = 0; i < vecs_size; i++) {
         this->table[i] = new bool[5];
@@ -218,7 +212,7 @@ void Func_classes::fill_classes_table() {
     }
     cout << "The system is fully-fuctional " << endl;
 }
-void Func_classes::console_print_vecs() {
+void Func_fullness::console_print_vecs() {
     cout << '\n' << "Vectors you inserted in: " << endl;
     for (int i = 0; i < vecs_size; i++) {
         for (int j = 0; j < STD_VEC_SIZE; j++) {
@@ -227,7 +221,7 @@ void Func_classes::console_print_vecs() {
         cout << endl;
     }
 }
-void Func_classes::console_print_table(std::vector<std::string> headers) {
+void Func_fullness::console_print_table(std::vector<std::string> headers) {
     
     int rows = vecs_size;
 
@@ -315,14 +309,12 @@ void Func_classes::console_print_table(std::vector<std::string> headers) {
     cout << endl;
 }
 int main() {
-    int size = 4;
+    const int size = 2;
     string strs[size] = {
-        "0111",
-        "10101110",
-        "11001100",
-        "0001"
+        "1010",
+        "0110"
     };
-    Func_classes getter;
+    Func_fullness getter;
     getter.input_vecs(size, strs);
     getter.console_print_vecs();
     getter.fill_classes_table();
